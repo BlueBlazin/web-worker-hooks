@@ -18,7 +18,7 @@ This package provides a suite of hooks to perform background tasks in Web Worker
 
 Starting with the most general hook
 
-1. `useWorker`.
+1. `useWorker`
 
 ```jsx
 function App() {
@@ -40,9 +40,9 @@ function App() {
 }
 ```
 
-The function provided to the hook gets called immediately inside the worker It receives two arguments, `postMessage` which shadows the `postMessage` function available on the worker scope. And a `setOnMessage` function which can be used to set `onmessage`.
+The function provided to the hook gets called immediately inside a web worker. It receives two arguments, `postMessage` which shadows the `postMessage` function available on the worker scope. And a `setOnMessage` function which can be used to set `onmessage`.
 
-The hook returns a plain `Worker` instance so all its methods are available for use.
+The hook returns a plain `Worker` object so all its methods are available for use.
 
 2. `useWorkerTimeout`
 
@@ -54,7 +54,6 @@ function App() {
 
   React.useEffect(() => {
     function startTimer() {
-      // The timeout will be run in a worker thread
       clearTimeout.current = workerSetTimeout(startTimer, 1000);
       setCount((c) => c + 1);
     }
@@ -63,7 +62,7 @@ function App() {
   return (
     <div>
       <div>{count}</div>
-      <button onClick={() => clearTimeout.current()}>Cancel Timer</button>
+      <button onClick={() => clearTimeout.current()}>Stop Timer</button>
     </div>
   );
 }

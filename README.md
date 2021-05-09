@@ -116,3 +116,5 @@ The `usePureWorker` hook can be used to easily create functions that can run a c
 <a href="https://codesandbox.io/s/web-worker-hooks-example-yefcp" target="_blank">
   <img alt="Edit 5v9yoz7xn4" src="https://codesandbox.io/static/img/play-codesandbox.svg">
 </a>
+
+![example video](https://github.com/BlueBlazin/web-worker-hooks/blob/master/example.mp4)

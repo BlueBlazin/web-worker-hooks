@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 type SerializablePrimitive =
   | boolean
@@ -86,7 +86,7 @@ function makeWorker(workerFunction: WorkerFunction) {
 }
 
 function makeWorkerFromBlobPart(blobCode: string) {
-  const blob = new Blob([blobCode], { type: 'text/javascript' });
+  const blob = new Blob([blobCode], { type: "text/javascript" });
   const blobUrl = URL.createObjectURL(blob);
 
   const worker = new Worker(blobUrl);
@@ -114,29 +114,29 @@ export function useWorkerTimeout() {
     let timeoutId: number;
 
     function startTimeout(timeout: number) {
-      timeoutId = setTimeout(() => postMessage('TIMEOUT'), timeout);
+      timeoutId = setTimeout(() => postMessage("TIMEOUT"), timeout);
     }
 
     setOnMessage((msg) => {
-      if (msg.data[0] === 'SET_TIMEOUT') {
+      if (msg.data[0] === "SET_TIMEOUT") {
         startTimeout(msg.data[1]);
-      } else if (msg.data[0] === 'CLEAR_TIMEOUT') {
+      } else if (msg.data[0] === "CLEAR_TIMEOUT") {
         clearTimeout(timeoutId);
       }
     });
   });
 
-  function workerSetTimeout(handler: () => unknown, timeout: number) {
+  function workerSetTimeout(handler: () => void, timeout: number) {
     worker.onmessage = (msg) => {
-      if (msg.data === 'TIMEOUT') {
+      if (msg.data === "TIMEOUT") {
         handler();
       }
     };
 
-    worker.postMessage(['SET_TIMEOUT', timeout]);
+    worker.postMessage(["SET_TIMEOUT", timeout]);
 
     return () => {
-      worker.postMessage(['CLEAR_TIMEOUT']);
+      worker.postMessage(["CLEAR_TIMEOUT"]);
     };
   }
 
@@ -165,29 +165,29 @@ export function useWorkerInterval() {
     let intervalId: number;
 
     function startInterval(timeout: number) {
-      intervalId = setInterval(() => postMessage('TIMEOUT'), timeout);
+      intervalId = setInterval(() => postMessage("TIMEOUT"), timeout);
     }
 
     setOnMessage((msg) => {
-      if (msg.data[0] === 'SET_INTERVAL') {
+      if (msg.data[0] === "SET_INTERVAL") {
         startInterval(msg.data[1]);
-      } else if (msg.data[0] === 'CLEAR_INTERVAL') {
+      } else if (msg.data[0] === "CLEAR_INTERVAL") {
         clearInterval(intervalId);
       }
     });
   });
 
-  function workerSetInterval(handler: () => unknown, timeout: number) {
+  function workerSetInterval(handler: () => void, timeout: number) {
     worker.onmessage = (msg) => {
-      if (msg.data === 'TIMEOUT') {
+      if (msg.data === "TIMEOUT") {
         handler();
       }
     };
 
-    worker.postMessage(['SET_INTERVAL', timeout]);
+    worker.postMessage(["SET_INTERVAL", timeout]);
 
     return () => {
-      worker.postMessage(['CLEAR_INTERVAL']);
+      worker.postMessage(["CLEAR_INTERVAL"]);
     };
   }
 

@@ -12,6 +12,7 @@ React hooks for running code inside web workers without needing to eject CRA app
   2. [useWorkerTimeout](#useWorkerTimeout)
   3. [useWorkerInterval](#useWorkerInterval)
   4. [usePureWorker](#usePureWorker)
+- [Example](#example)
 
 ---
 
@@ -109,3 +110,9 @@ function App() {
 The `usePureWorker` hook can be used to easily create functions that can run a compute intensive pure-ish function when called and return a Promise which will resolve to the result of the computation from the worker.
 
 ---
+
+## Example
+
+<a href="https://codesandbox.io/s/web-worker-hooks-example-yefcp" target="_blank">
+  <img alt="Edit 5v9yoz7xn4" src="https://codesandbox.io/static/img/play-codesandbox.svg">
+</a>

@@ -133,7 +133,7 @@ The `usePureWorker` hook can be used to easily create functions that can run a c
 
 ## API Reference
 
-## `useWorker`
+### `useWorker`
 
 ### Import
 
@@ -153,7 +153,7 @@ Returns:
 
 ---
 
-## `useWorkerTimeout`
+### `useWorkerTimeout`
 
 ### Import
 
@@ -167,7 +167,7 @@ Returns:
 
 ---
 
-## `useWorkerInterval`
+### `useWorkerInterval`
 
 ### Import
 
@@ -181,7 +181,7 @@ Returns:
 
 ---
 
-## `usePureWorker`
+### `usePureWorker`
 
 ### Import
 

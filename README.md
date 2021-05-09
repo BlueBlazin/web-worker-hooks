@@ -4,6 +4,17 @@ React hooks for running code inside web workers without needing to eject CRA app
 
 ---
 
+## Table of contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+  1. [useWorker](#useWorker)
+  2. [useWorkerTimeout](#useWorkerTimeout)
+  3. [useWorkerInterval](#useWorkerInterval)
+  4. [usePureWorker](#usePureWorker)
+
+---
+
 ## Installation
 
 ```sh
@@ -18,7 +29,7 @@ This package provides a suite of hooks to perform background tasks in Web Worker
 
 Starting with the most general hook
 
-1. `useWorker`
+1. #### `useWorker`
 
 ```jsx
 function App() {
@@ -44,7 +55,7 @@ The function provided to the hook gets called immediately inside a web worker. I
 
 The hook returns a plain `Worker` object so all its methods are available for use.
 
-2. `useWorkerTimeout`
+2. #### `useWorkerTimeout`
 
 ```jsx
 function App() {
@@ -70,11 +81,11 @@ function App() {
 
 The hook takes no arguments and returns a near drop-in replacement for `window.setTimeout`. The main difference is that calling `workerSetTimeout` will return a function which can be called for clearing the timeout instead of needing to call `window.clearTimeout`.
 
-3. `useWorkerInterval`
+3. #### `useWorkerInterval`
 
 Identical to `useWorkerTimeout` except that it calls `setInterval`.
 
-4. `usePureWorker`
+4. #### `usePureWorker`
 
 ```jsx
 function fib(n) {

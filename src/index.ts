@@ -51,6 +51,12 @@ interface PureFunctionParams {
   transfer: Transferable[];
 }
 
+type PackageName = string;
+
+type WorkerImports = {
+  [key: string]: PackageName;
+};
+
 /**
  * A hook for creating a web worker and executing specified code inside it.
  *
@@ -67,22 +73,55 @@ interface PureFunctionParams {
  *
  * To post messages to the worker thread, you can use `Worker.postMessage`.
  */
-export function useWorker(workerFunction: WorkerFunction) {
-  const [worker] = React.useState(() => makeWorker(workerFunction));
+export function useWorker(
+  workerFunction: WorkerFunction,
+  imports: WorkerImports = {}
+) {
+  const [worker] = React.useState(() => makeWorker(workerFunction, imports));
 
   return worker;
 }
 
-function makeWorker(workerFunction: WorkerFunction) {
-  const blobCode = `
-      function setOnMessage(messageHandler) {
-        self.onmessage = messageHandler;
-      }
-  
-      (${workerFunction})(self.postMessage, setOnMessage);
-    `;
+function makeWorker(workerFunction: WorkerFunction, imports: WorkerImports) {
+  const importDclrs = makeImportDeclarations(imports);
+
+  const importsObj = makeImportsObj(imports);
+
+  const blobCode = makeBlobString(importDclrs, importsObj, workerFunction);
 
   return makeWorkerFromBlobPart(blobCode);
+}
+
+function makeImportDeclarations(imports: WorkerImports): string {
+  return Object.entries(imports)
+    .map(([name, path]) => `import * as ${name} from ${path};`)
+    .join("\n");
+}
+
+function makeImportsObj(imports: WorkerImports): string {
+  const mappings = Object.keys(imports).map((name) => `"${name}": ${name}`);
+
+  return `const importsObj = {
+    ${mappings.join(",\n")}
+  };`;
+}
+
+function makeBlobString(
+  importDclrs: string,
+  importsObj: string,
+  workerFunction: WorkerFunction
+): string {
+  return `
+    ${importDclrs}
+
+    ${importsObj}
+
+    function setOnMessage(messageHandler) {
+      self.onmessage = messageHandler;
+    }
+
+    (${workerFunction})(self.postMessage, setOnMessage);
+  `;
 }
 
 function makeWorkerFromBlobPart(blobCode: string) {

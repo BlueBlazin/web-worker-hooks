@@ -108,14 +108,14 @@ test("makeBlobString", () => {
 });
 
 test("makePureBlobString", () => {
-  const pureFunction = function (args) {
+  const pureFunction = function () {
     return 42;
   };
 
   const result = makePureBlobString(pureFunction);
   const expectation = `
     onmessage = (msg) => {
-      postMessage((function (args) {
+      postMessage((function () {
         return 42;
       })(...msg.data));
     };

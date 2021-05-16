@@ -39,8 +39,13 @@ export type WorkerSetOnMessage = (messageHandler: MessageHandler) => void;
 
 export type WorkerFunction = (
   postMessage: WorkerPostMessage,
-  setOnMessage: WorkerSetOnMessage
+  setOnMessage: WorkerSetOnMessage,
+  imports: ImportsObj
 ) => void;
+
+export interface ImportsObj {
+  [key: string]: unknown;
+}
 
 export type PureFunction<T = StructuredClonable, R = StructuredClonable> = (
   args?: T
@@ -123,7 +128,7 @@ export function makeBlobString(
       self.onmessage = messageHandler;
     }
 
-    (${workerFunction})(self.postMessage, setOnMessage);
+    (${workerFunction})(self.postMessage, setOnMessage, importsObj);
   `;
 }
 
@@ -260,7 +265,7 @@ export function usePureWorker(pureFunction: PureFunction) {
   const [worker] = React.useState(() => makeWorkerFromBlobPart(blobCode));
 
   function workerPureFunction({ args, transfer = [] }: PureFunctionParams) {
-    worker.postMessage(args, transfer);
+    worker.postMessage([args, transfer], transfer);
 
     return new Promise((resolve) => {
       worker.onmessage = (msg) => resolve(msg.data);
@@ -275,7 +280,7 @@ export function usePureWorker(pureFunction: PureFunction) {
 export function makePureBlobString(pureFunction: PureFunction) {
   return `
     onmessage = (msg) => {
-      postMessage((${pureFunction})(...msg.data));
+      postMessage((${pureFunction})(...msg.data[0]), msg.data[1]);
     };
   `;
 }

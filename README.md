@@ -28,7 +28,7 @@ npm install web-worker-hooks
 
 ## Introduction
 
-`web-worker-hooks` aims to provide simple but powerful easy to use hooks for running tasks in web workers without needing to eject apps bootstrapped with Create React App.
+`web-worker-hooks` aims to provide simple but powerful easy-to-use hooks for running tasks in web workers without needing to eject apps bootstrapped with Create React App.
 
 The library provides elegant drop-in replacements for `setTimeout` and `setInterval`. The `useWorker` hook gives you full control over Web Worker message passing. `usePureWorker` provides a clean way to run a compute intensive function in a worker thread, and unblock the UI.
 
@@ -197,7 +197,7 @@ Returns:
 
 1. `workerPureFunction({ args, transfer = [] }) => Promise` - An abstraction over running the supplied pure function in a web worker / background thread. The function takes a single object as argument with two properties:
 
-   1. `args: any[]` - A list of arguments that will be passed to the pure function call. **NOTE:** The pure function will not be passed the list itself, just the values as separate arguments.
-   2. `transfer?: any[]` - A list of `Transferable` values to transfer ownership. **UNSTABLE:** The API for this is still being worked out and will change.
+   - `args: any[]` - A list of arguments that will be passed to the pure function call. **NOTE:** The pure function will not be passed the list itself, just the values as separate arguments.
+   - `transfer?: any[]` - A list of `Transferable` values to transfer ownership. **UNSTABLE:** The API for this is still being worked out and will change.
 
    It returns a `Promise` that resolves to the result of the pure function.

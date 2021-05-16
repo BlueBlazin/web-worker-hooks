@@ -1,0 +1,64 @@
+.container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.counters-container {
+  width: 600px;
+  display: flex;
+  justify-content: center;
+  height: 300px;
+  align-items: center;
+}
+
+.counter {
+  font-size: 100px;
+  width: 200px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  background-color: #eee;
+  padding: 25px;
+  margin: 25px;
+  border-radius: 5px;
+  align-items: center;
+}
+
+.description {
+  font-size: 18px;
+}
+
+.button {
+  width: 250px;
+  height: 65px;
+  border-radius: 5px;
+  background-color: rgb(71, 133, 226);
+  border: 1px solid rgb(36, 89, 168);
+  cursor: pointer;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  margin: 10px;
+}
+
+.fib-button {
+  width: 250px;
+  height: 65px;
+  border-radius: 5px;
+  background-color: rgb(71, 133, 226);
+  border: 1px solid rgb(36, 89, 168);
+  cursor: pointer;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  margin: 10px;
+}

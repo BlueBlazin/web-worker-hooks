@@ -101,7 +101,7 @@ test("makeBlobString", () => {
       const bar = 42;
       console.log("foo");
       return bar;
-    })(self.postMessage, setOnMessage);
+    })(self.postMessage, setOnMessage, importsObj);
   `;
 
   expect(getCleanLines(result)).toStrictEqual(getCleanLines(expectation));
@@ -117,7 +117,7 @@ test("makePureBlobString", () => {
     onmessage = (msg) => {
       postMessage((function () {
         return 42;
-      })(...msg.data));
+      })(...msg.data[0]), msg.data[1]);
     };
   `;
 

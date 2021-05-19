@@ -78,67 +78,42 @@ export type WorkerImports = {
  *
  * To post messages to the worker thread, you can use `Worker.postMessage`.
  */
-export function useWorker(
-  workerFunction: WorkerFunction,
-  imports: WorkerImports = {}
-) {
-  const [worker] = React.useState(() => makeWorker(workerFunction, imports));
+export function useWorker(workerFunction: WorkerFunction) {
+  const [[worker, blobUrl]] = React.useState(() => makeWorker(workerFunction));
+
+  React.useEffect(() => {
+    return () => {
+      worker.terminate();
+      URL.revokeObjectURL(blobUrl);
+    };
+  }, []);
 
   return worker;
 }
 
-export function makeWorker(
-  workerFunction: WorkerFunction,
-  imports: WorkerImports
-) {
-  const importDclrs = makeImportDeclarations(imports);
+export function makeWorker(workerFunction: WorkerFunction) {
+  const blobString = makeBlobString(workerFunction);
 
-  const importsObj = makeImportsObj(imports);
-
-  const blobCode = makeBlobString(importDclrs, importsObj, workerFunction);
-
-  return makeWorkerFromBlobPart(blobCode);
+  return makeWorkerFromBlobString(blobString);
 }
 
-export function makeImportDeclarations(imports: WorkerImports): string {
-  return Object.entries(imports)
-    .map(([name, path]) => `import * as ${name} from "${path}";`)
-    .join("\n");
-}
-
-export function makeImportsObj(imports: WorkerImports): string {
-  const mappings = Object.keys(imports).map((name) => `"${name}": ${name}`);
-
-  return `const importsObj = {
-    ${mappings.join(",\n")}
-  };`;
-}
-
-export function makeBlobString(
-  importDclrs: string,
-  importsObj: string,
-  workerFunction: WorkerFunction
-): string {
+export function makeBlobString(workerFunction: WorkerFunction): string {
   return `
-    ${importDclrs}
-
-    ${importsObj}
-
     function setOnMessage(messageHandler) {
       self.onmessage = messageHandler;
     }
 
-    (${workerFunction})(self.postMessage, setOnMessage, importsObj);
+    (${workerFunction})(self.postMessage, setOnMessage);
   `;
 }
 
-export function makeWorkerFromBlobPart(blobCode: string) {
-  const blob = new Blob([blobCode], { type: "text/javascript" });
+export function makeWorkerFromBlobString(blobString: string): [Worker, string] {
+  const blob = new Blob([blobString], { type: "text/javascript" });
   const blobUrl = URL.createObjectURL(blob);
 
-  const worker = new Worker(blobUrl);
+  const worker = new Worker(blobUrl, { type: "module" });
 
-  return worker;
+  return [worker, blobUrl];
 }
 
 /**
@@ -186,8 +161,6 @@ export function useWorkerTimeout() {
       worker.postMessage(["CLEAR_TIMEOUT"]);
     };
   }
-
-  React.useEffect(() => () => worker.terminate(), []);
 
   return workerSetTimeout;
 }
@@ -238,8 +211,6 @@ export function useWorkerInterval() {
     };
   }
 
-  React.useEffect(() => () => worker.terminate(), []);
-
   return workerSetInterval;
 }
 
@@ -262,7 +233,9 @@ export function useWorkerInterval() {
 export function usePureWorker(pureFunction: PureFunction) {
   const blobCode = makePureBlobString(pureFunction);
 
-  const [worker] = React.useState(() => makeWorkerFromBlobPart(blobCode));
+  const [[worker, blobUrl]] = React.useState(() =>
+    makeWorkerFromBlobString(blobCode)
+  );
 
   function workerPureFunction({ args, transfer = [] }: PureFunctionParams) {
     worker.postMessage([args, transfer], transfer);
@@ -272,7 +245,13 @@ export function usePureWorker(pureFunction: PureFunction) {
     });
   }
 
-  React.useEffect(() => () => worker.terminate(), []);
+  React.useEffect(
+    () => () => {
+      worker.terminate();
+      URL.revokeObjectURL(blobUrl);
+    },
+    []
+  );
 
   return workerPureFunction;
 }

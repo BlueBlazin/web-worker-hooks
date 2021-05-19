@@ -8,7 +8,7 @@ function App() {
         <Link to="/timer-example">Timer Example</Link>
       </div>
       <div>
-        <Link to="/import-example">Import Example</Link>
+        <Link to="/pureworker-example">Background Compute Example</Link>
       </div>
     </div>
   );

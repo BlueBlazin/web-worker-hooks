@@ -14,6 +14,7 @@ React hooks for running code inside web workers without needing to eject CRA app
   3. [useWorkerInterval](#useWorkerInterval)
   4. [usePureWorker](#usePureWorker)
 - [Example](#example)
+- [Limitations & Pitfalls](#limitations-&-pitfalls)
 - [API Reference](#api-reference)
 
 ---
@@ -128,6 +129,13 @@ The `usePureWorker` hook can be used to easily create functions that can run a c
 </a>
 
 ![example gif](https://raw.githubusercontent.com/BlueBlazin/web-worker-hooks/master/pure-worker-example.gif)
+
+---
+
+## Limitations & Pitfalls
+
+1. The main limitation currently is that **you cannot import external libraries** into your workers. This can be a dealbreaker for your usecase so please consider it before installing. You may need to eject your CRA app if you must use a library inside your worker.
+2. There is an invisible barrier between the worlds of the function provided to `useWorker` or `usePureWorker` and the main thread. You cannot use any variables or functions defined outside, in the function you pass to run inside the web worker. The `useWorkerTimeout` and `useWorkerInterval` functions don't suffer from this shortcoming since they don't run the callback in a worker thread. Only the timer itself is run in the worker.
 
 ---
 

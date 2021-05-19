@@ -10,7 +10,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "web-vitals": "^1.0.1",
-    "web-worker-hooks": "^0.3.2"
+    "web-worker-hooks": "^0.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +33,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.2",
+    "babel-preset-react": "^6.24.1"
   }
 }

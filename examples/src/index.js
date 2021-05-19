@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./index.css";
 import App from "./App";
 import TimerPage from "./pages/TimerPage";
-import ImportPage from "./pages/ImportPage";
+import PureWorkerPage from "./pages/PureWorkerPage";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -18,8 +18,8 @@ ReactDOM.render(
         <Route exact path="/timer-example">
           <TimerPage />
         </Route>
-        <Route exact path="/import-example">
-          <ImportPage />
+        <Route exact path="/pureworker-example">
+          <PureWorkerPage />
         </Route>
       </Switch>
     </Router>
